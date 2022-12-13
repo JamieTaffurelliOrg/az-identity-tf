@@ -121,25 +121,25 @@ resource "azuread_group_member" "group_members_groups" {
 }
 
 resource "azuread_directory_role" "roles" {
-  for_each     = { for k, v in var.registered_roles : k => v if k != null }
+  for_each     = { for k in var.registered_roles : k => k if k != null }
   display_name = each.value
 }
 
 resource "azuread_directory_role_assignment" "role_assignments_users" {
   for_each            = { for k, v in var.role_assignments_users : k => v if k != null }
-  role_id             = azuread_directory_role.roles[(each.value["role_reference"])].object_id
+  role_id             = each.value["template_id"]
   principal_object_id = azuread_user.users[(each.value["user_reference"])].object_id
 }
 
 resource "azuread_directory_role_assignment" "role_assignments_service_principals" {
   for_each            = { for k, v in var.role_assignments_service_principals : k => v if k != null }
-  role_id             = azuread_directory_role.roles[(each.value["role_reference"])].object_id
+  role_id             = each.value["template_id"]
   principal_object_id = azuread_service_principal.service_principals[(each.value["service_principal_reference"])].object_id
 }
 
 resource "azuread_directory_role_assignment" "role_assignments_groups" {
   for_each            = { for k, v in var.role_assignments_groups : k => v if k != null }
-  role_id             = azuread_directory_role.roles[(each.value["role_reference"])].object_id
+  role_id             = each.value["template_id"]
   principal_object_id = azuread_group.groups[(each.value["group_reference"])].object_id
 }
 

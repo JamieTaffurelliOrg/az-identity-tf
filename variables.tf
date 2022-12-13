@@ -148,7 +148,7 @@ variable "role_assignments_users" {
   type = map(object(
     {
       user_reference = string
-      role_reference = string
+      template_id    = string
     }
   ))
   default     = {}
@@ -159,7 +159,7 @@ variable "role_assignments_service_principals" {
   type = map(object(
     {
       service_principal_reference = string
-      role_reference              = string
+      template_id                 = string
     }
   ))
   default     = {}
@@ -170,7 +170,7 @@ variable "role_assignments_groups" {
   type = map(object(
     {
       group_reference = string
-      role_reference  = string
+      template_id     = string
     }
   ))
   default     = {}
