@@ -215,3 +215,20 @@ variable "rbac_role_assignments_groups" {
   default     = {}
   description = "The RBAC role assignments to give to groups"
 }
+
+variable "rbac_role_definitions" {
+  type = list(object(
+    {
+      name              = string
+      scope             = string
+      description       = string
+      actions           = optional(list(string), [])
+      not_actions       = optional(list(string), [])
+      data_actions      = optional(list(string), [])
+      not_data_actions  = optional(list(string), [])
+      assignable_scopes = list(string)
+    }
+  ))
+  default     = []
+  description = "The custom RBAC role defintions to create to groups"
+}

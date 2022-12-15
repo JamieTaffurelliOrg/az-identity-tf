@@ -40,6 +40,7 @@ No modules.
 | [azurerm_role_assignment.rbac_role_assignments_groups](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
 | [azurerm_role_assignment.rbac_role_assignments_service_principals](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
 | [azurerm_role_assignment.rbac_role_assignments_users](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
+| [azurerm_role_definition.rbac_role_definitions](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_definition) | resource |
 | [random_password.user_password](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
 | [azuread_client_config.current](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/data-sources/client_config) | data source |
 
@@ -56,6 +57,7 @@ No modules.
 | <a name="input_rbac_role_assignments_groups"></a> [rbac\_role\_assignments\_groups](#input\_rbac\_role\_assignments\_groups) | The RBAC role assignments to give to groups | <pre>map(object(<br>    {<br>      group_reference      = string<br>      role_definition_name = string<br>      scope                = string<br>      description          = optional(string)<br>    }<br>  ))</pre> | `{}` | no |
 | <a name="input_rbac_role_assignments_service_principals"></a> [rbac\_role\_assignments\_service\_principals](#input\_rbac\_role\_assignments\_service\_principals) | The RBAC role assignments to give to service principals | <pre>map(object(<br>    {<br>      service_principal_reference = string<br>      role_definition_name        = string<br>      scope                       = string<br>      description                 = optional(string)<br>    }<br>  ))</pre> | `{}` | no |
 | <a name="input_rbac_role_assignments_users"></a> [rbac\_role\_assignments\_users](#input\_rbac\_role\_assignments\_users) | The RBAC role assignments to give to users | <pre>map(object(<br>    {<br>      user_reference       = string<br>      role_definition_name = string<br>      scope                = string<br>      description          = optional(string)<br>    }<br>  ))</pre> | `{}` | no |
+| <a name="input_rbac_role_definitions"></a> [rbac\_role\_definitions](#input\_rbac\_role\_definitions) | The custom RBAC role defintions to create to groups | <pre>list(object(<br>    {<br>      name              = string<br>      scope             = string<br>      description       = string<br>      actions           = optional(list(string), [])<br>      not_actions       = optional(list(string), [])<br>      data_actions      = optional(list(string), [])<br>      not_data_actions  = optional(list(string), [])<br>      assignable_scopes = list(string)<br>    }<br>  ))</pre> | `[]` | no |
 | <a name="input_registered_roles"></a> [registered\_roles](#input\_registered\_roles) | The Azure AD roles to register for role assignments | `list(string)` | `[]` | no |
 | <a name="input_role_assignments_groups"></a> [role\_assignments\_groups](#input\_role\_assignments\_groups) | The role assignments to give to groups | <pre>map(object(<br>    {<br>      group_reference = string<br>      template_id     = string<br>    }<br>  ))</pre> | `{}` | no |
 | <a name="input_role_assignments_service_principals"></a> [role\_assignments\_service\_principals](#input\_role\_assignments\_service\_principals) | The role assignments to give to service principals | <pre>map(object(<br>    {<br>      service_principal_reference = string<br>      template_id                 = string<br>    }<br>  ))</pre> | `{}` | no |
@@ -70,6 +72,7 @@ No modules.
 | <a name="output_application_federated_identity_credentials"></a> [application\_federated\_identity\_credentials](#output\_application\_federated\_identity\_credentials) | Azure AD application federated identity credentials |
 | <a name="output_applications"></a> [applications](#output\_applications) | Azure AD applications |
 | <a name="output_groups"></a> [groups](#output\_groups) | Azure AD groups |
+| <a name="output_rbac_role_definitions"></a> [rbac\_role\_definitions](#output\_rbac\_role\_definitions) | Azure Custom RBAC roles |
 | <a name="output_service_principals"></a> [service\_principals](#output\_service\_principals) | Azure AD service principals |
 | <a name="output_users"></a> [users](#output\_users) | Azure AD users |
 <!-- END_TF_DOCS -->
