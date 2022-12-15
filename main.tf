@@ -148,6 +148,10 @@ resource "azurerm_role_assignment" "rbac_role_assignments_users" {
   scope                = each.value["scope"]
   role_definition_name = each.value["role_definition_name"]
   principal_id         = azuread_user.users[(each.value["user_reference"])].object_id
+
+  depends_on = [
+    azurerm_role_definition.rbac_role_definitions
+  ]
 }
 
 resource "azurerm_role_assignment" "rbac_role_assignments_service_principals" {
@@ -155,6 +159,10 @@ resource "azurerm_role_assignment" "rbac_role_assignments_service_principals" {
   scope                = each.value["scope"]
   role_definition_name = each.value["role_definition_name"]
   principal_id         = azuread_service_principal.service_principals[(each.value["service_principal_reference"])].object_id
+
+  depends_on = [
+    azurerm_role_definition.rbac_role_definitions
+  ]
 }
 
 resource "azurerm_role_assignment" "rbac_role_assignments_groups" {
@@ -162,4 +170,24 @@ resource "azurerm_role_assignment" "rbac_role_assignments_groups" {
   scope                = each.value["scope"]
   role_definition_name = each.value["role_definition_name"]
   principal_id         = azuread_group.groups[(each.value["group_reference"])].object_id
+
+  depends_on = [
+    azurerm_role_definition.rbac_role_definitions
+  ]
+}
+
+resource "azurerm_role_definition" "rbac_role_definitions" {
+  for_each    = { for k in var.rbac_role_definitions : k => k.name }
+  name        = each.key
+  scope       = each.value["scope"]
+  description = each.value["description"]
+
+  permissions {
+    actions          = each.value["actions"]
+    not_actions      = each.value["not_actions"]
+    data_actions     = each.value["data_actions"]
+    not_data_actions = each.value["not_data_actions"]
+  }
+
+  assignable_scopes = each.value["assignable_scopes"]
 }

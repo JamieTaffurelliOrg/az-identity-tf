@@ -22,3 +22,8 @@ output "groups" {
   value       = [for groups in azuread_group.groups : groups]
   description = "Azure AD groups"
 }
+
+output "rbac_role_definitions" {
+  value       = [for rbac_role_definitions in azurerm_role_definition.rbac_role_definitions : rbac_role_definitions.id]
+  description = "Azure Custom RBAC roles"
+}
