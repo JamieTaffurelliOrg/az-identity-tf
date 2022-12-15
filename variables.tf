@@ -232,3 +232,45 @@ variable "rbac_role_definitions" {
   default     = []
   description = "The custom RBAC role defintions to create to groups"
 }
+
+variable "custom_rbac_role_assignments_users" {
+  type = map(object(
+    {
+      user_reference        = string
+      custom_role_reference = string
+      role_definition_name  = string
+      scope                 = string
+      description           = optional(string)
+    }
+  ))
+  default     = {}
+  description = "The RBAC role assignments to give to users for custom role definitions"
+}
+
+variable "custom_rbac_role_assignments_service_principals" {
+  type = map(object(
+    {
+      service_principal_reference = string
+      custom_role_reference       = string
+      role_definition_name        = string
+      scope                       = string
+      description                 = optional(string)
+    }
+  ))
+  default     = {}
+  description = "The RBAC role assignments to give to service principals for custom role definitions"
+}
+
+variable "custom_rbac_role_assignments_groups" {
+  type = map(object(
+    {
+      group_reference       = string
+      custom_role_reference = string
+      role_definition_name  = string
+      scope                 = string
+      description           = optional(string)
+    }
+  ))
+  default     = {}
+  description = "The RBAC role assignments to give to groups for custom role definitions"
+}
