@@ -238,7 +238,6 @@ variable "custom_rbac_role_assignments_users" {
     {
       user_reference        = string
       custom_role_reference = string
-      role_definition_name  = string
       scope                 = string
       description           = optional(string)
     }
@@ -252,7 +251,6 @@ variable "custom_rbac_role_assignments_service_principals" {
     {
       service_principal_reference = string
       custom_role_reference       = string
-      role_definition_name        = string
       scope                       = string
       description                 = optional(string)
     }
@@ -266,7 +264,6 @@ variable "custom_rbac_role_assignments_groups" {
     {
       group_reference       = string
       custom_role_reference = string
-      role_definition_name  = string
       scope                 = string
       description           = optional(string)
     }

@@ -181,11 +181,10 @@ resource "azurerm_role_definition" "rbac_role_definitions" {
 }
 
 resource "azurerm_role_assignment" "custom_rbac_role_assignments_users" {
-  for_each             = { for k, v in var.custom_rbac_role_assignments_users : k => v if k != null }
-  scope                = each.value["scope"]
-  role_definition_id   = azurerm_role_definition.rbac_role_definitions[(each.value["custom_role_reference"])].role_definition_id
-  role_definition_name = each.value["role_definition_name"]
-  principal_id         = azuread_user.users[(each.value["user_reference"])].object_id
+  for_each           = { for k, v in var.custom_rbac_role_assignments_users : k => v if k != null }
+  scope              = each.value["scope"]
+  role_definition_id = azurerm_role_definition.rbac_role_definitions[(each.value["custom_role_reference"])].role_definition_id
+  principal_id       = azuread_user.users[(each.value["user_reference"])].object_id
 
   depends_on = [
     azurerm_role_definition.rbac_role_definitions
@@ -193,11 +192,10 @@ resource "azurerm_role_assignment" "custom_rbac_role_assignments_users" {
 }
 
 resource "azurerm_role_assignment" "custom_rbac_role_assignments_service_principals" {
-  for_each             = { for k, v in var.custom_rbac_role_assignments_service_principals : k => v if k != null }
-  scope                = each.value["scope"]
-  role_definition_id   = azurerm_role_definition.rbac_role_definitions[(each.value["custom_role_reference"])].role_definition_id
-  role_definition_name = each.value["role_definition_name"]
-  principal_id         = azuread_service_principal.service_principals[(each.value["service_principal_reference"])].object_id
+  for_each           = { for k, v in var.custom_rbac_role_assignments_service_principals : k => v if k != null }
+  scope              = each.value["scope"]
+  role_definition_id = azurerm_role_definition.rbac_role_definitions[(each.value["custom_role_reference"])].role_definition_id
+  principal_id       = azuread_service_principal.service_principals[(each.value["service_principal_reference"])].object_id
 
   depends_on = [
     azurerm_role_definition.rbac_role_definitions
@@ -205,11 +203,10 @@ resource "azurerm_role_assignment" "custom_rbac_role_assignments_service_princip
 }
 
 resource "azurerm_role_assignment" "custom_rbac_role_assignments_groups" {
-  for_each             = { for k, v in var.custom_rbac_role_assignments_groups : k => v if k != null }
-  scope                = each.value["scope"]
-  role_definition_id   = azurerm_role_definition.rbac_role_definitions[(each.value["custom_role_reference"])].role_definition_id
-  role_definition_name = each.value["role_definition_name"]
-  principal_id         = azuread_group.groups[(each.value["group_reference"])].object_id
+  for_each           = { for k, v in var.custom_rbac_role_assignments_groups : k => v if k != null }
+  scope              = each.value["scope"]
+  role_definition_id = azurerm_role_definition.rbac_role_definitions[(each.value["custom_role_reference"])].role_definition_id
+  principal_id       = azuread_group.groups[(each.value["group_reference"])].object_id
 
   depends_on = [
     azurerm_role_definition.rbac_role_definitions
