@@ -177,7 +177,7 @@ resource "azurerm_role_assignment" "rbac_role_assignments_groups" {
 }
 
 resource "azurerm_role_definition" "rbac_role_definitions" {
-  for_each    = { for k in var.rbac_role_definitions : k => k.name }
+  for_each    = { for k in var.rbac_role_definitions : k.name => k }
   name        = each.key
   scope       = each.value["scope"]
   description = each.value["description"]
