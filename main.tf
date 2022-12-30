@@ -330,4 +330,14 @@ resource "azurerm_monitor_aad_diagnostic_setting" "aad_diagnostics" {
       days    = 365
     }
   }
+
+  log {
+    category = "B2CRequestLogs"
+    enabled  = true
+
+    retention_policy {
+      enabled = true
+      days    = 365
+    }
+  }
 }
