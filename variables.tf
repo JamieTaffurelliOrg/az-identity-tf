@@ -271,3 +271,13 @@ variable "custom_rbac_role_assignments_groups" {
   default     = {}
   description = "The RBAC role assignments to give to groups for custom role definitions"
 }
+
+variable "log_analytics_workspace" {
+  type = object(
+    {
+      name                = string
+      resource_group_name = string
+    }
+  )
+  description = "The existing log analytics workspaces to send diagnostic logs to"
+}

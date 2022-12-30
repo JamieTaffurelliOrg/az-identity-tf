@@ -5,8 +5,9 @@ terraform {
       version = "~> 2.30"
     }
     azurerm = {
-      source  = "hashicorp/azurerm"
-      version = "~> 3.20"
+      configuration_aliases = [azurerm.logs]
+      source                = "hashicorp/azurerm"
+      version               = "~> 3.20"
     }
     random = {
       source  = "hashicorp/random"
