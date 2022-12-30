@@ -15,6 +15,7 @@
 |------|---------|
 | <a name="provider_azuread"></a> [azuread](#provider\_azuread) | ~> 2.30 |
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.20 |
+| <a name="provider_azurerm.logs"></a> [azurerm.logs](#provider\_azurerm.logs) | ~> 3.20 |
 | <a name="provider_random"></a> [random](#provider\_random) | ~> 3.4 |
 
 ## Modules
@@ -37,6 +38,7 @@ No modules.
 | [azuread_group_member.group_members_users](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/group_member) | resource |
 | [azuread_service_principal.service_principals](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/service_principal) | resource |
 | [azuread_user.users](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/user) | resource |
+| [azurerm_monitor_aad_diagnostic_setting.aad_diagnostics](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_aad_diagnostic_setting) | resource |
 | [azurerm_role_assignment.custom_rbac_role_assignments_groups](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
 | [azurerm_role_assignment.custom_rbac_role_assignments_service_principals](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
 | [azurerm_role_assignment.custom_rbac_role_assignments_users](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
@@ -46,6 +48,7 @@ No modules.
 | [azurerm_role_definition.rbac_role_definitions](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_definition) | resource |
 | [random_password.user_password](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
 | [azuread_client_config.current](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/data-sources/client_config) | data source |
+| [azurerm_log_analytics_workspace.logs](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/log_analytics_workspace) | data source |
 
 ## Inputs
 
@@ -60,6 +63,7 @@ No modules.
 | <a name="input_group_memberships_service_principals"></a> [group\_memberships\_service\_principals](#input\_group\_memberships\_service\_principals) | The group memberships of Azure AD service principals | <pre>map(object(<br>    {<br>      group_reference  = string<br>      member_reference = string<br>    }<br>  ))</pre> | `{}` | no |
 | <a name="input_group_memberships_users"></a> [group\_memberships\_users](#input\_group\_memberships\_users) | The group memberships of Azure AD users | <pre>map(object(<br>    {<br>      group_reference  = string<br>      member_reference = string<br>    }<br>  ))</pre> | `{}` | no |
 | <a name="input_groups"></a> [groups](#input\_groups) | The Azure AD groups to create | <pre>map(object(<br>    {<br>      display_name           = string<br>      assisgnable_to_role    = optional(bool, true)<br>      description            = string<br>      owners                 = optional(list(string))<br>      prevent_duplicate_name = optional(bool, true)<br>      security_enabled       = optional(bool, true)<br>    }<br>  ))</pre> | `{}` | no |
+| <a name="input_log_analytics_workspace"></a> [log\_analytics\_workspace](#input\_log\_analytics\_workspace) | The existing log analytics workspaces to send diagnostic logs to | <pre>object(<br>    {<br>      name                = string<br>      resource_group_name = string<br>    }<br>  )</pre> | n/a | yes |
 | <a name="input_rbac_role_assignments_groups"></a> [rbac\_role\_assignments\_groups](#input\_rbac\_role\_assignments\_groups) | The RBAC role assignments to give to groups | <pre>map(object(<br>    {<br>      group_reference      = string<br>      role_definition_name = string<br>      scope                = string<br>      description          = optional(string)<br>    }<br>  ))</pre> | `{}` | no |
 | <a name="input_rbac_role_assignments_service_principals"></a> [rbac\_role\_assignments\_service\_principals](#input\_rbac\_role\_assignments\_service\_principals) | The RBAC role assignments to give to service principals | <pre>map(object(<br>    {<br>      service_principal_reference = string<br>      role_definition_name        = string<br>      scope                       = string<br>      description                 = optional(string)<br>    }<br>  ))</pre> | `{}` | no |
 | <a name="input_rbac_role_assignments_users"></a> [rbac\_role\_assignments\_users](#input\_rbac\_role\_assignments\_users) | The RBAC role assignments to give to users | <pre>map(object(<br>    {<br>      user_reference       = string<br>      role_definition_name = string<br>      scope                = string<br>      description          = optional(string)<br>    }<br>  ))</pre> | `{}` | no |

@@ -212,3 +212,122 @@ resource "azurerm_role_assignment" "custom_rbac_role_assignments_groups" {
     azurerm_role_definition.rbac_role_definitions
   ]
 }
+
+resource "azurerm_monitor_aad_diagnostic_setting" "aad_diagnostics" {
+  name                       = "${var.log_analytics_workspace.name}-security-logging"
+  log_analytics_workspace_id = data.azurerm_log_analytics_workspace.logs.id
+
+  log {
+    category = "SignInLogs"
+    enabled  = true
+
+    retention_policy {
+      enabled = true
+      days    = 365
+    }
+  }
+  log {
+    category = "AuditLogs"
+    enabled  = true
+
+    retention_policy {
+      enabled = true
+      days    = 365
+    }
+  }
+  log {
+    category = "NonInteractiveUserSignInLogs"
+    enabled  = true
+
+    retention_policy {
+      enabled = true
+      days    = 365
+    }
+  }
+  log {
+    category = "ServicePrincipalSignInLogs"
+    enabled  = true
+
+    retention_policy {
+      enabled = true
+      days    = 365
+    }
+  }
+  log {
+    category = "ManagedIdentitySignInLogs"
+    enabled  = true
+
+    retention_policy {
+      enabled = true
+      days    = 365
+    }
+  }
+  log {
+    category = "ProvisioningLogs"
+    enabled  = true
+
+    retention_policy {
+      enabled = true
+      days    = 365
+    }
+  }
+  log {
+    category = "ADFSSignInLogs"
+    enabled  = true
+
+    retention_policy {
+      enabled = true
+      days    = 365
+    }
+  }
+
+  log {
+    category = "RiskyUsers"
+    enabled  = true
+
+    retention_policy {
+      enabled = true
+      days    = 365
+    }
+  }
+
+  log {
+    category = "UserRiskEvents"
+    enabled  = true
+
+    retention_policy {
+      enabled = true
+      days    = 365
+    }
+  }
+
+  log {
+    category = "NetworkAccessTrafficLogs"
+    enabled  = true
+
+    retention_policy {
+      enabled = true
+      days    = 365
+    }
+  }
+
+  log {
+    category = "RiskyServicePrincipals"
+    enabled  = true
+
+    retention_policy {
+      enabled = true
+      days    = 365
+    }
+  }
+
+  log {
+    category = "ServicePrincipalRiskEvents"
+    enabled  = true
+
+    retention_policy {
+      enabled = true
+      days    = 365
+    }
+  }
+}
