@@ -340,4 +340,14 @@ resource "azurerm_monitor_aad_diagnostic_setting" "aad_diagnostics" {
       days    = 365
     }
   }
+
+  log {
+    category = "EnrichedOffice365AuditLogs"
+    enabled  = true
+
+    retention_policy {
+      enabled = true
+      days    = 365
+    }
+  }
 }
