@@ -4,7 +4,7 @@ variable "applications" {
       display_name                   = string
       device_only_auth_enabled       = optional(bool, false)
       fallback_public_client_enabled = optional(bool, false)
-      identifier_uris                = optional(list(string))
+      identifier_uris                = optional(list(string), [])
       logo_image                     = optional(string)
       marketing_uri                  = optional(string)
       owners                         = optional(list(string))
