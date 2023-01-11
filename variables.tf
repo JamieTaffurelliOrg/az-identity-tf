@@ -39,13 +39,13 @@ variable "service_principals" {
   type = map(object(
     {
       account_enabled              = optional(bool, true)
-      alternative_names            = optional(list(string), [])
+      alternative_names            = optional(list(string))
       app_role_assignment_required = optional(bool, false)
       application_id_reference     = string
       description                  = string
       login_url                    = optional(string)
       notes                        = optional(string)
-      notification_email_addresses = optional(list(string), [])
+      notification_email_addresses = optional(list(string))
       owners                       = optional(list(string))
       use_existing                 = optional(bool, false)
       tags                         = list(string)
