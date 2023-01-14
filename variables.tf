@@ -105,6 +105,16 @@ variable "groups" {
   description = "The Azure AD groups to create"
 }
 
+variable "objects" {
+  type = map(object(
+    {
+      object_id = string
+    }
+  ))
+  default     = {}
+  description = "Azure AD objects created outside of the calling configuration that require role assignments"
+}
+
 variable "group_memberships_users" {
   type = map(object(
     {
@@ -136,6 +146,17 @@ variable "group_memberships_groups" {
   ))
   default     = {}
   description = "The group memberships of Azure AD groups"
+}
+
+variable "group_memberships_objects" {
+  type = map(object(
+    {
+      group_reference  = string
+      member_reference = string
+    }
+  ))
+  default     = {}
+  description = "The group memberships of Azure AD objects"
 }
 
 variable "registered_roles" {
@@ -177,6 +198,17 @@ variable "role_assignments_groups" {
   description = "The role assignments to give to groups"
 }
 
+variable "role_assignments_objects" {
+  type = map(object(
+    {
+      object_reference = string
+      template_id      = string
+    }
+  ))
+  default     = {}
+  description = "The role assignments to give to objects"
+}
+
 variable "rbac_role_assignments_users" {
   type = map(object(
     {
@@ -214,6 +246,19 @@ variable "rbac_role_assignments_groups" {
   ))
   default     = {}
   description = "The RBAC role assignments to give to groups"
+}
+
+variable "rbac_role_assignments_objects" {
+  type = map(object(
+    {
+      object_reference     = string
+      role_definition_name = string
+      scope                = string
+      description          = optional(string)
+    }
+  ))
+  default     = {}
+  description = "The RBAC role assignments to give to objects"
 }
 
 variable "rbac_role_definitions" {
@@ -270,6 +315,19 @@ variable "custom_rbac_role_assignments_groups" {
   ))
   default     = {}
   description = "The RBAC role assignments to give to groups for custom role definitions"
+}
+
+variable "custom_rbac_role_assignments_objects" {
+  type = map(object(
+    {
+      object_reference      = string
+      custom_role_reference = string
+      scope                 = string
+      description           = optional(string)
+    }
+  ))
+  default     = {}
+  description = "The RBAC role assignments to give to objects for custom role definitions"
 }
 
 variable "log_analytics_workspace" {
