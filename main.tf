@@ -123,7 +123,7 @@ resource "azuread_group_member" "group_members_groups" {
 resource "azuread_group_member" "group_members_objects" {
   for_each         = { for k, v in var.group_memberships_objects : k => v if k != null }
   group_object_id  = azuread_group.groups[(each.value["group_reference"])].object_id
-  member_object_id = var.objects["member_reference"].object_id
+  member_object_id = var.objects[(each.value["member_reference"])].object_id
 }
 
 resource "azuread_directory_role" "roles" {
@@ -152,7 +152,7 @@ resource "azuread_directory_role_assignment" "role_assignments_groups" {
 resource "azuread_directory_role_assignment" "role_assignments_objects" {
   for_each            = { for k, v in var.role_assignments_objects : k => v if k != null }
   role_id             = each.value["template_id"]
-  principal_object_id = var.objects["objects_reference"].object_id
+  principal_object_id = var.objects[(each.value["object_reference"])].object_id
 }
 
 resource "azurerm_role_assignment" "rbac_role_assignments_users" {
@@ -180,7 +180,7 @@ resource "azurerm_role_assignment" "rbac_role_assignments_objects" {
   for_each             = { for k, v in var.rbac_role_assignments_objects : k => v if k != null }
   scope                = each.value["scope"]
   role_definition_name = each.value["role_definition_name"]
-  principal_id         = var.objects["object_reference"].object_id
+  principal_id         = var.objects[(each.value["object_reference"])].object_id
 }
 
 resource "azurerm_role_definition" "rbac_role_definitions" {
@@ -224,7 +224,7 @@ resource "azurerm_role_assignment" "custom_rbac_role_assignments_objects" {
   for_each           = { for k, v in var.custom_rbac_role_assignments_objects : k => v if k != null }
   scope              = each.value["scope"]
   role_definition_id = azurerm_role_definition.rbac_role_definitions[(each.value["custom_role_reference"])].role_definition_resource_id
-  principal_id       = var.objects["object_reference"].object_id
+  principal_id       = var.objects[(each.value["object_reference"])].object_id
 }
 
 resource "azurerm_monitor_aad_diagnostic_setting" "aad_diagnostics" {
