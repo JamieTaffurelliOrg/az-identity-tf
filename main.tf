@@ -117,13 +117,13 @@ resource "azuread_group_member" "group_members_service_principals" {
 resource "azuread_group_member" "group_members_groups" {
   for_each         = { for k, v in var.group_memberships_groups : k => v if k != null }
   group_object_id  = azuread_group.groups[(each.value["group_reference"])].object_id
-  member_object_id = azuread_group.groups[(each.value["object_reference"])].object_id
+  member_object_id = azuread_group.groups[(each.value["member_reference"])].object_id
 }
 
 resource "azuread_group_member" "group_members_objects" {
   for_each         = { for k, v in var.group_memberships_objects : k => v if k != null }
   group_object_id  = azuread_group.groups[(each.value["group_reference"])].object_id
-  member_object_id = var.objects[(each.value["object_reference"])].object_id
+  member_object_id = var.objects[(each.value["member_reference"])].object_id
 }
 
 resource "azuread_directory_role" "roles" {
