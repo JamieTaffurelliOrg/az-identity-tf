@@ -333,9 +333,10 @@ variable "custom_rbac_role_assignments_objects" {
 variable "log_analytics_workspace" {
   type = object(
     {
-      name                = string
-      resource_group_name = string
+      name                = optional(string)
+      resource_group_name = optional(string)
     }
   )
+  default     = {}
   description = "The existing log analytics workspaces to send diagnostic logs to"
 }

@@ -228,8 +228,9 @@ resource "azurerm_role_assignment" "custom_rbac_role_assignments_objects" {
 }
 
 resource "azurerm_monitor_aad_diagnostic_setting" "aad_diagnostics" {
+  count                      = var.log_analytics_workspace.name != null ? 1 : 0
   name                       = "${var.log_analytics_workspace.name}-security-logging"
-  log_analytics_workspace_id = data.azurerm_log_analytics_workspace.logs.id
+  log_analytics_workspace_id = data.azurerm_log_analytics_workspace.logs[0].id
 
   log {
     category = "SignInLogs"
