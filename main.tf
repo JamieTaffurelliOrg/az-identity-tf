@@ -204,6 +204,12 @@ resource "azurerm_role_assignment" "custom_rbac_role_assignments_users" {
   scope              = each.value["scope"]
   role_definition_id = azurerm_role_definition.rbac_role_definitions[(each.value["custom_role_reference"])].role_definition_resource_id
   principal_id       = azuread_user.users[(each.value["user_reference"])].object_id
+
+  lifecycle {
+    ignore_changes = [
+      role_definition_id
+    ]
+  }
 }
 
 resource "azurerm_role_assignment" "custom_rbac_role_assignments_service_principals" {
@@ -211,6 +217,12 @@ resource "azurerm_role_assignment" "custom_rbac_role_assignments_service_princip
   scope              = each.value["scope"]
   role_definition_id = azurerm_role_definition.rbac_role_definitions[(each.value["custom_role_reference"])].role_definition_resource_id
   principal_id       = azuread_service_principal.service_principals[(each.value["service_principal_reference"])].object_id
+
+  lifecycle {
+    ignore_changes = [
+      role_definition_id
+    ]
+  }
 }
 
 resource "azurerm_role_assignment" "custom_rbac_role_assignments_groups" {
@@ -218,6 +230,12 @@ resource "azurerm_role_assignment" "custom_rbac_role_assignments_groups" {
   scope              = each.value["scope"]
   role_definition_id = azurerm_role_definition.rbac_role_definitions[(each.value["custom_role_reference"])].role_definition_resource_id
   principal_id       = azuread_group.groups[(each.value["group_reference"])].object_id
+
+  lifecycle {
+    ignore_changes = [
+      role_definition_id
+    ]
+  }
 }
 
 resource "azurerm_role_assignment" "custom_rbac_role_assignments_objects" {
@@ -225,6 +243,12 @@ resource "azurerm_role_assignment" "custom_rbac_role_assignments_objects" {
   scope              = each.value["scope"]
   role_definition_id = azurerm_role_definition.rbac_role_definitions[(each.value["custom_role_reference"])].role_definition_resource_id
   principal_id       = var.objects[(each.value["object_reference"])].object_id
+
+  lifecycle {
+    ignore_changes = [
+      role_definition_id
+    ]
+  }
 }
 
 resource "azurerm_monitor_aad_diagnostic_setting" "aad_diagnostics" {
@@ -358,6 +382,16 @@ resource "azurerm_monitor_aad_diagnostic_setting" "aad_diagnostics" {
 
   log {
     category = "EnrichedOffice365AuditLogs"
+    enabled  = true
+
+    retention_policy {
+      enabled = true
+      days    = 365
+    }
+  }
+
+  log {
+    category = "MicrosoftGraphActivityLogs"
     enabled  = true
 
     retention_policy {
