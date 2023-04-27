@@ -94,7 +94,7 @@ variable "groups" {
   type = map(object(
     {
       display_name           = string
-      assisgnable_to_role    = optional(bool, true)
+      assignable_to_role     = optional(bool, true)
       description            = string
       owners                 = optional(list(string))
       prevent_duplicate_name = optional(bool, true)

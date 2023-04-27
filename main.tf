@@ -95,7 +95,7 @@ resource "azuread_user" "users" {
 resource "azuread_group" "groups" {
   for_each                = { for k, v in var.groups : k => v if k != null }
   display_name            = each.value["display_name"]
-  assignable_to_role      = each.value["assisgnable_to_role"]
+  assignable_to_role      = each.value["assignable_to_role"]
   description             = each.value["description"]
   owners                  = each.value["owners"] == null ? [data.azuread_client_config.current.object_id] : each.value["owners"]
   prevent_duplicate_names = each.value["prevent_duplicate_name"]
