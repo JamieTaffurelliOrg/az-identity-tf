@@ -13,7 +13,18 @@ variable "applications" {
       sign_in_audience               = optional(string, "AzureADMyOrg")
       support_url                    = optional(string)
       terms_of_service_url           = optional(string)
-      tags                           = list(string)
+      required_resource_accesses = optional(list(object(
+        {
+          resource_app_id = string
+          resource_accesses = list(object(
+            {
+              id   = string
+              type = string
+            }
+          ))
+        }
+      )), [])
+      tags = list(string)
     }
   ))
   default     = {}
