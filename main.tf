@@ -12,7 +12,24 @@ resource "azuread_application" "applications" {
   sign_in_audience               = each.value["sign_in_audience"]
   support_url                    = each.value["support_url"]
   terms_of_service_url           = each.value["terms_of_service_url"]
-  tags                           = each.value["tags"]
+
+  dynamic "required_resource_access" {
+    for_each = { for k in each.value["required_resource_accesses"] : k.resource_app_id => k if k != null }
+
+    content {
+      resource_app_id = required_resource_access.key
+
+      dynamic "resource_access" {
+        for_each = { for k in required_resource_access.value["resource_accesses"] : k.id => k }
+
+        content {
+          id   = resource_access.key
+          type = resource_access.value["type"]
+        }
+      }
+    }
+  }
+  tags = each.value["tags"]
 }
 
 resource "azuread_application_federated_identity_credential" "federated_identity_credentials" {
