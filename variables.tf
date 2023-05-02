@@ -72,7 +72,7 @@ variable "users" {
       user_principal_name  = string
       display_name         = string
       account_enabled      = optional(bool, true)
-      business_phones      = optional(string)
+      business_phones      = optional(list(string))
       city                 = optional(string)
       company_name         = optional(string)
       cost_center          = optional(string)
