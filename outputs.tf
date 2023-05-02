@@ -16,6 +16,7 @@ output "service_principals" {
 output "users" {
   value       = [for users in azuread_user.users : users]
   description = "Azure AD users"
+  sensitive   = true
 }
 
 output "groups" {
