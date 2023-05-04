@@ -267,10 +267,19 @@ resource "azurerm_role_assignment" "custom_rbac_role_assignments_objects" {
     ]
   }
 }
+resource "random_uuid" "pim_assignment_template_deployment_names" {
+  for_each = { for k in var.pim_assignments_groups : replace("${k.scope}-${k.group_reference}-${k.role_definition_id}-${k.request_type}", "/", "-") => k }
+  keepers = {
+    scope = each.value["scope"]
+    scope = each.value["group_reference"]
+    scope = each.value["role_definition_id"]
+    scope = each.value["request_type"]
+  }
+}
 
 resource "azurerm_resource_group_template_deployment" "pim_assignment_template" {
   for_each            = { for k in var.pim_assignments_groups : replace("${k.scope}-${k.group_reference}-${k.role_definition_id}-${k.request_type}", "/", "-") => k }
-  name                = each.key
+  name                = random_uuid.pim_assignment_template_deployment_names[(each.key)].result
   resource_group_name = var.arm_deploy_resource_group_name
   template_content    = file("arm/roleEligibilityScheduleRequest.json")
   parameters_content = jsonencode({
