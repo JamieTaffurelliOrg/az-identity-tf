@@ -1,9 +1,3 @@
-variable "arm_deploy_resource_group_name" {
-  type        = string
-  default     = ""
-  description = "The resource group to use for arm template deployments"
-}
-
 variable "applications" {
   type = map(object(
     {
