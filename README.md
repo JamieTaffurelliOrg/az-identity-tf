@@ -5,6 +5,7 @@
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.4.0 |
+| <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) | ~> 1.5 |
 | <a name="requirement_azuread"></a> [azuread](#requirement\_azuread) | ~> 2.30 |
 | <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) | ~> 3.20 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | ~> 3.4 |
@@ -13,6 +14,7 @@
 
 | Name | Version |
 |------|---------|
+| <a name="provider_azapi"></a> [azapi](#provider\_azapi) | ~> 1.5 |
 | <a name="provider_azuread"></a> [azuread](#provider\_azuread) | ~> 2.30 |
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.20 |
 | <a name="provider_azurerm.logs"></a> [azurerm.logs](#provider\_azurerm.logs) | ~> 3.20 |
@@ -26,6 +28,7 @@ No modules.
 
 | Name | Type |
 |------|------|
+| [azapi_resource.pim_assignments](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) | resource |
 | [azuread_application.applications](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application) | resource |
 | [azuread_application_federated_identity_credential.federated_identity_credentials](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application_federated_identity_credential) | resource |
 | [azuread_directory_role.roles](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/directory_role) | resource |
@@ -41,7 +44,6 @@ No modules.
 | [azuread_service_principal.service_principals](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/service_principal) | resource |
 | [azuread_user.users](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/user) | resource |
 | [azurerm_monitor_aad_diagnostic_setting.aad_diagnostics](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_aad_diagnostic_setting) | resource |
-| [azurerm_resource_group_template_deployment.pim_assignment_template](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group_template_deployment) | resource |
 | [azurerm_role_assignment.custom_rbac_role_assignments_groups](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
 | [azurerm_role_assignment.custom_rbac_role_assignments_objects](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
 | [azurerm_role_assignment.custom_rbac_role_assignments_service_principals](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
@@ -52,6 +54,7 @@ No modules.
 | [azurerm_role_assignment.rbac_role_assignments_users](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_assignment) | resource |
 | [azurerm_role_definition.rbac_role_definitions](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/role_definition) | resource |
 | [random_password.user_password](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) | resource |
+| [random_uuid.pim_assignment_template_deployment_names](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/uuid) | resource |
 | [azuread_client_config.current](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/data-sources/client_config) | data source |
 | [azurerm_log_analytics_workspace.logs](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/log_analytics_workspace) | data source |
 
@@ -61,7 +64,6 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_application_federated_identity_credentials"></a> [application\_federated\_identity\_credentials](#input\_application\_federated\_identity\_credentials) | The OpenID Connect credentials to add to Azure AD applications | <pre>map(object(<br>    {<br>      display_name             = string<br>      application_id_reference = string<br>      description              = string<br>      audiences                = optional(list(string), ["api://AzureADTokenExchange"])<br>      issuer                   = string<br>      subject                  = string<br>    }<br>  ))</pre> | `{}` | no |
 | <a name="input_applications"></a> [applications](#input\_applications) | The Azure AD applications to create | <pre>map(object(<br>    {<br>      display_name                   = string<br>      device_only_auth_enabled       = optional(bool, false)<br>      fallback_public_client_enabled = optional(bool, false)<br>      identifier_uris                = optional(list(string), [])<br>      logo_image                     = optional(string)<br>      marketing_uri                  = optional(string)<br>      owners                         = optional(list(string))<br>      prevent_duplicate_name         = optional(bool, true)<br>      privacy_statement_uri          = optional(string)<br>      sign_in_audience               = optional(string, "AzureADMyOrg")<br>      support_url                    = optional(string)<br>      terms_of_service_url           = optional(string)<br>      required_resource_accesses = optional(list(object(<br>        {<br>          resource_app_id = string<br>          resource_accesses = list(object(<br>            {<br>              id   = string<br>              type = string<br>            }<br>          ))<br>        }<br>      )), [])<br>      tags = list(string)<br>    }<br>  ))</pre> | `{}` | no |
-| <a name="input_arm_deploy_resource_group_name"></a> [arm\_deploy\_resource\_group\_name](#input\_arm\_deploy\_resource\_group\_name) | The resource group to use for arm template deployments | `string` | `""` | no |
 | <a name="input_custom_rbac_role_assignments_groups"></a> [custom\_rbac\_role\_assignments\_groups](#input\_custom\_rbac\_role\_assignments\_groups) | The RBAC role assignments to give to groups for custom role definitions | <pre>map(object(<br>    {<br>      group_reference       = string<br>      custom_role_reference = string<br>      scope                 = string<br>      description           = optional(string)<br>    }<br>  ))</pre> | `{}` | no |
 | <a name="input_custom_rbac_role_assignments_objects"></a> [custom\_rbac\_role\_assignments\_objects](#input\_custom\_rbac\_role\_assignments\_objects) | The RBAC role assignments to give to objects for custom role definitions | <pre>map(object(<br>    {<br>      object_reference      = string<br>      custom_role_reference = string<br>      scope                 = string<br>      description           = optional(string)<br>    }<br>  ))</pre> | `{}` | no |
 | <a name="input_custom_rbac_role_assignments_service_principals"></a> [custom\_rbac\_role\_assignments\_service\_principals](#input\_custom\_rbac\_role\_assignments\_service\_principals) | The RBAC role assignments to give to service principals for custom role definitions | <pre>map(object(<br>    {<br>      service_principal_reference = string<br>      custom_role_reference       = string<br>      scope                       = string<br>      description                 = optional(string)<br>    }<br>  ))</pre> | `{}` | no |
