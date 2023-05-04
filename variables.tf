@@ -1,3 +1,9 @@
+variable "arm_deploy_resource_group_name" {
+  type        = string
+  default     = ""
+  description = "The resource group to use for arm template deployments"
+}
+
 variable "applications" {
   type = map(object(
     {
@@ -352,18 +358,12 @@ variable "pim_assignments_groups" {
       justification      = string
       duration           = optional(string)
       end_date_time      = optional(string)
-      type               = optional(string)
+      type               = optional(string, "NoExpiration")
       start_date_time    = optional(string)
     }
   ))
   default     = []
   description = "The PIM assignments to give to Azure AD groups"
-}
-
-variable "arm_deploy_resource_group_name" {
-  type        = string
-  default     = ""
-  description = "The resource group to use for arm template deployments"
 }
 
 variable "log_analytics_workspace" {
