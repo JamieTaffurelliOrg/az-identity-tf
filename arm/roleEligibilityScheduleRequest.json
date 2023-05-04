@@ -1,0 +1,82 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "outputs": {},
+  "parameters": {
+    "condition": {
+      "defaultValue": "",
+      "type": "string"
+    },
+    "duration": {
+      "defaultValue": "",
+      "type": "String"
+    },
+    "endDateTime": {
+      "defaultValue": "",
+      "type": "String"
+    },
+    "justification": {
+      "type": "String"
+    },
+    "principalId": {
+      "type": "String"
+    },
+    "requestType": {
+      "allowedValues": [
+        "AdminAssign",
+        "AdminExtend",
+        "AdminRemove",
+        "AdminRenew",
+        "AdminUpdate",
+        "SelfActivate",
+        "SelfDeactivate",
+        "SelfExtend",
+        "SelfRenew"
+      ],
+      "type": "String"
+    },
+    "roleDefinitionId": {
+      "type": "String"
+    },
+    "scope": {
+      "type": "string"
+    },
+    "startDateTime": {
+      "defaultValue": "[utcNow()]",
+      "type": "String"
+    },
+    "type": {
+      "allowedValues": [
+        "AfterDateTime",
+        "AfterDuration",
+        "NoExpiration"
+      ],
+      "type": "String"
+    }
+  },
+  "resources": [
+    {
+      "apiVersion": "2022-04-01-preview",
+      "name": "[guid(parameters('scope'), parameters('principalId'), parameters('roleDefinitionId'), parameters('requestType'))]",
+      "properties": {
+        "condition": "[parameters('condition')]",
+        "conditionVersion": "2.0",
+        "justification": "[parameters('justification')]",
+        "principalId": "[parameters('principalId')]",
+        "requestType": "[parameters('requestType')]",
+        "roleDefinitionId": "[parameters('roleDefinitionId')]",
+        "scheduleInfo": {
+          "expiration": {
+            "duration": "[parameters('duration')]",
+            "endDateTime": "[parameters('endDateTime')]",
+            "type": "[parameters('type')]"
+          },
+          "startDateTime": "[parameters('startDateTime')]"
+        }
+      },
+      "scope": "[parameters('scope')]",
+      "type": "Microsoft.Authorization/roleEligibilityScheduleRequests"
+    }
+  ],
+  "variables": {}
+}

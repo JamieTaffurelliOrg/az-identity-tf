@@ -341,6 +341,31 @@ variable "custom_rbac_role_assignments_objects" {
   description = "The RBAC role assignments to give to objects for custom role definitions"
 }
 
+variable "pim_assignments_groups" {
+  type = list(object(
+    {
+      scope              = string
+      group_reference    = string
+      role_definition_id = string
+      request_type       = optional(string, "AdminUpdate")
+      condition          = optional(string)
+      justification      = string
+      duration           = optional(string)
+      end_date_time      = optional(string)
+      type               = optional(string)
+      start_date_time    = optional(string)
+    }
+  ))
+  default     = []
+  description = "The PIM assignments to give to Azure AD groups"
+}
+
+variable "arm_deploy_resource_group_name" {
+  type        = string
+  default     = ""
+  description = "The resource group to use for arm template deployments"
+}
+
 variable "log_analytics_workspace" {
   type = object(
     {

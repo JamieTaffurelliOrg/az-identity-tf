@@ -268,6 +268,46 @@ resource "azurerm_role_assignment" "custom_rbac_role_assignments_objects" {
   }
 }
 
+resource "azurerm_resource_group_template_deployment" "windows_image_template" {
+  for_each            = { for k in var.pim_assignments_groups : "${k.scope}-${k.group_reference}-${k.role_definition_id}-${k.request_type}" => k }
+  name                = each.key
+  resource_group_name = var.arm_deploy_resource_group_name
+  template_content    = file("arm/roleEligibilityScheduleRequest.json")
+  parameters_content = jsonencode({
+    "scope" = {
+      value = each.value["scope"]
+    },
+    "condition" = {
+      value = each.value["condition"]
+    },
+    "justification" = {
+      value = each.value["justification"]
+    },
+    "principalId" = {
+      value = azuread_group.groups[(each.value["group_reference"])].object_id
+    },
+    "requestType" = {
+      value = each.value["request_type"]
+    },
+    "roleDefinitionId" = {
+      value = each.value["role_definition_id"]
+    },
+    "duration" = {
+      value = each.value["duration"]
+    },
+    "endDateTime" = {
+      value = each.value["end_date_time"]
+    },
+    "type" = {
+      value = each.value["type"]
+    }
+    "startDateTime" = {
+      value = each.value["start_date_time"]
+    }
+  })
+  deployment_mode = "Incremental"
+}
+
 resource "azurerm_monitor_aad_diagnostic_setting" "aad_diagnostics" {
   count                      = var.log_analytics_workspace.name != null ? 1 : 0
   name                       = "${var.log_analytics_workspace.name}-security-logging"
