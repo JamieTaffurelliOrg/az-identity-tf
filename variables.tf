@@ -348,7 +348,6 @@ variable "pim_assignments_groups" {
       group_reference    = string
       role_definition_id = string
       request_type       = optional(string, "AdminUpdate")
-      condition          = optional(string)
       justification      = string
       duration           = optional(string)
       end_date_time      = optional(string)
