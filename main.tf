@@ -277,7 +277,38 @@ resource "random_uuid" "pim_assignment_template_deployment_names" {
   }
 }
 
-resource "azapi_resource" "pim_assignments" {
+resource "azurerm_management_group_template_deployment" "pim_assignment_template" {
+  for_each            = { for k in var.pim_assignments_groups : replace("${k.scope}-${k.group_reference}-${k.role_definition_id}-${k.request_type}", "/", "-") => k }
+  name                = random_uuid.pim_assignment_template_deployment_names[(each.key)].result
+  management_group_id = "/providers/Microsoft.Management/managementGroups/jamietaffurelli"
+  location            = "westeurope"
+  template_content    = file("arm/roleEligibilityScheduleRequest.json")
+  parameters_content = jsonencode({
+    "scope" = {
+      value = each.value["scope"]
+    },
+    "justification" = {
+      value = each.value["justification"]
+    },
+    "principalId" = {
+      value = azuread_group.groups[(each.value["group_reference"])].object_id
+    },
+    "requestType" = {
+      value = each.value["request_type"]
+    },
+    "roleDefinitionId" = {
+      value = each.value["role_definition_id"]
+    },
+    "duration" = {
+      value = each.value["duration"]
+    },
+    "startDateTime" = {
+      value = each.value["start_date_time"]
+    }
+  })
+}
+
+/*resource "azapi_resource" "pim_assignments" {
   for_each                  = { for k in var.pim_assignments_groups : replace("${k.scope}-${k.group_reference}-${k.role_definition_id}-${k.request_type}", "/", "-") => k }
   type                      = "Microsoft.Authorization/roleEligibilityScheduleRequests@2020-10-01"
   name                      = random_uuid.pim_assignment_template_deployment_names[(each.key)].result
@@ -307,7 +338,7 @@ resource "azapi_resource" "pim_assignments" {
   })
 
   response_export_values = ["*"]
-}
+}*/
 
 resource "azurerm_monitor_aad_diagnostic_setting" "aad_diagnostics" {
   count                      = var.log_analytics_workspace.name != null ? 1 : 0
