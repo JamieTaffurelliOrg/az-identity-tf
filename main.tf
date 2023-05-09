@@ -308,38 +308,6 @@ resource "azurerm_management_group_template_deployment" "pim_assignment_template
   })
 }
 
-/*resource "azapi_resource" "pim_assignments" {
-  for_each                  = { for k in var.pim_assignments_groups : replace("${k.scope}-${k.group_reference}-${k.role_definition_id}-${k.request_type}", "/", "-") => k }
-  type                      = "Microsoft.Authorization/roleEligibilityScheduleRequests@2020-10-01"
-  name                      = random_uuid.pim_assignment_template_deployment_names[(each.key)].result
-  parent_id                 = each.value["scope"]
-  removing_special_chars    = false
-  ignore_casing             = false
-  ignore_missing_property   = true
-  schema_validation_enabled = true
-
-  body = jsonencode({
-    properties = {
-      condition        = each.value["condition"]
-      conditionVersion = "2.0"
-      justification    = each.value["justification"]
-      principalId      = azuread_group.groups[(each.value["group_reference"])].object_id
-      requestType      = each.value["request_type"]
-      roleDefinitionId = each.value["role_definition_id"]
-      scheduleInfo = {
-        expiration = {
-          duration    = each.value["duration"]
-          endDateTime = each.value["end_date_time"]
-          type        = each.value["type"]
-        }
-        startDateTime = each.value["start_date_time"]
-      }
-    }
-  })
-
-  response_export_values = ["*"]
-}*/
-
 resource "azurerm_monitor_aad_diagnostic_setting" "aad_diagnostics" {
   count                      = var.log_analytics_workspace.name != null ? 1 : 0
   name                       = "${var.log_analytics_workspace.name}-security-logging"
