@@ -14,7 +14,6 @@
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azapi"></a> [azapi](#provider\_azapi) | ~> 1.5 |
 | <a name="provider_azuread"></a> [azuread](#provider\_azuread) | ~> 2.30 |
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.20 |
 | <a name="provider_azurerm.logs"></a> [azurerm.logs](#provider\_azurerm.logs) | ~> 3.20 |
@@ -28,7 +27,6 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [azapi_resource.pim_assignments](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) | resource |
 | [azuread_application.applications](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application) | resource |
 | [azuread_application_federated_identity_credential.federated_identity_credentials](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application_federated_identity_credential) | resource |
 | [azuread_directory_role.roles](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/directory_role) | resource |
@@ -76,7 +74,7 @@ No modules.
 | <a name="input_groups"></a> [groups](#input\_groups) | The Azure AD groups to create | <pre>map(object(<br>    {<br>      display_name           = string<br>      assignable_to_role     = optional(bool, true)<br>      description            = string<br>      owners                 = optional(list(string))<br>      prevent_duplicate_name = optional(bool, true)<br>      security_enabled       = optional(bool, true)<br>    }<br>  ))</pre> | `{}` | no |
 | <a name="input_log_analytics_workspace"></a> [log\_analytics\_workspace](#input\_log\_analytics\_workspace) | The existing log analytics workspaces to send diagnostic logs to | <pre>object(<br>    {<br>      name                = optional(string)<br>      resource_group_name = optional(string)<br>    }<br>  )</pre> | `{}` | no |
 | <a name="input_objects"></a> [objects](#input\_objects) | Azure AD objects created outside of the calling configuration that require role assignments | <pre>map(object(<br>    {<br>      object_id = string<br>    }<br>  ))</pre> | `{}` | no |
-| <a name="input_pim_assignments_groups"></a> [pim\_assignments\_groups](#input\_pim\_assignments\_groups) | The PIM assignments to give to Azure AD groups | <pre>list(object(<br>    {<br>      scope              = string<br>      group_reference    = string<br>      role_definition_id = string<br>      request_type       = optional(string, "AdminUpdate")<br>      justification      = string<br>      duration           = optional(string)<br>      end_date_time      = optional(string)<br>      type               = optional(string, "NoExpiration")<br>      start_date_time    = optional(string)<br>    }<br>  ))</pre> | `[]` | no |
+| <a name="input_pim_assignments_groups"></a> [pim\_assignments\_groups](#input\_pim\_assignments\_groups) | The PIM assignments to give to Azure AD groups | <pre>list(object(<br>    {<br>      management_group_id = string<br>      location            = string<br>      scope               = string<br>      group_reference     = string<br>      role_definition_id  = string<br>      request_type        = optional(string, "AdminUpdate")<br>      justification       = string<br>      duration            = optional(string)<br>      end_date_time       = optional(string)<br>      type                = optional(string, "NoExpiration")<br>      start_date_time     = optional(string)<br>      deploy              = bool<br>    }<br>  ))</pre> | `[]` | no |
 | <a name="input_rbac_role_assignments_groups"></a> [rbac\_role\_assignments\_groups](#input\_rbac\_role\_assignments\_groups) | The RBAC role assignments to give to groups | <pre>map(object(<br>    {<br>      group_reference      = string<br>      role_definition_name = string<br>      scope                = string<br>      description          = optional(string)<br>    }<br>  ))</pre> | `{}` | no |
 | <a name="input_rbac_role_assignments_objects"></a> [rbac\_role\_assignments\_objects](#input\_rbac\_role\_assignments\_objects) | The RBAC role assignments to give to objects | <pre>map(object(<br>    {<br>      object_reference     = string<br>      role_definition_name = string<br>      scope                = string<br>      description          = optional(string)<br>    }<br>  ))</pre> | `{}` | no |
 | <a name="input_rbac_role_assignments_service_principals"></a> [rbac\_role\_assignments\_service\_principals](#input\_rbac\_role\_assignments\_service\_principals) | The RBAC role assignments to give to service principals | <pre>map(object(<br>    {<br>      service_principal_reference = string<br>      role_definition_name        = string<br>      scope                       = string<br>      description                 = optional(string)<br>    }<br>  ))</pre> | `{}` | no |

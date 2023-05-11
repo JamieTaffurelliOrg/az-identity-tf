@@ -344,15 +344,18 @@ variable "custom_rbac_role_assignments_objects" {
 variable "pim_assignments_groups" {
   type = list(object(
     {
-      scope              = string
-      group_reference    = string
-      role_definition_id = string
-      request_type       = optional(string, "AdminUpdate")
-      justification      = string
-      duration           = optional(string)
-      end_date_time      = optional(string)
-      type               = optional(string, "NoExpiration")
-      start_date_time    = optional(string)
+      management_group_id = string
+      location            = string
+      scope               = string
+      group_reference     = string
+      role_definition_id  = string
+      request_type        = optional(string, "AdminUpdate")
+      justification       = string
+      duration            = optional(string)
+      end_date_time       = optional(string)
+      type                = optional(string, "NoExpiration")
+      start_date_time     = optional(string)
+      deploy              = bool
     }
   ))
   default     = []
