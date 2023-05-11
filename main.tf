@@ -268,20 +268,19 @@ resource "azurerm_role_assignment" "custom_rbac_role_assignments_objects" {
   }
 }
 resource "random_uuid" "pim_assignment_template_deployment_names" {
-  for_each = { for k in var.pim_assignments_groups : replace("${k.scope}-${k.group_reference}-${k.role_definition_id}-${k.request_type}", "/", "-") => k }
+  for_each = { for k in var.pim_assignments_groups : replace("${k.scope}-${k.group_reference}-${k.role_definition_id}", "/", "-") => k }
   keepers = {
     scope = each.value["scope"]
     scope = each.value["group_reference"]
     scope = each.value["role_definition_id"]
-    scope = each.value["request_type"]
   }
 }
 
 resource "azurerm_management_group_template_deployment" "pim_assignment_template" {
-  for_each            = { for k in var.pim_assignments_groups : replace("${k.scope}-${k.group_reference}-${k.role_definition_id}-${k.request_type}", "/", "-") => k }
+  for_each            = { for k in var.pim_assignments_groups : replace("${k.scope}-${k.group_reference}-${k.role_definition_id}", "/", "-") => k if k != null && k.deploy == true }
   name                = random_uuid.pim_assignment_template_deployment_names[(each.key)].result
-  management_group_id = "/providers/Microsoft.Management/managementGroups/jamietaffurelli"
-  location            = "westeurope"
+  management_group_id = each.value["management_group_id"]
+  location            = each.value["location"]
   template_content    = file("arm/roleEligibilityScheduleRequest.json")
   parameters_content = jsonencode({
     "scope" = {

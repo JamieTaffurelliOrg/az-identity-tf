@@ -42,7 +42,7 @@
     {
       "apiVersion": "2021-04-01",
       "location": "westeurope",
-      "name": "[guid(parameters('scope'), parameters('principalId'), parameters('roleDefinitionId'), parameters('requestType'), 'nested')]",
+      "name": "[guid(parameters('scope'), parameters('principalId'), parameters('roleDefinitionId'), 'nested')]",
       "properties": {
         "mode": "Incremental",
         "template": {
@@ -70,7 +70,7 @@
           ]
         }
       },
-      "scope": "[tenantResourceId('Microsoft.Management/managementGroups/', 'jamietaffurelli')]",
+      "scope": "[parameters('scope')]",
       "type": "Microsoft.Resources/deployments"
     }
   ],
