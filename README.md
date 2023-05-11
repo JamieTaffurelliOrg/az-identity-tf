@@ -14,7 +14,6 @@
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azapi"></a> [azapi](#provider\_azapi) | ~> 1.5 |
 | <a name="provider_azuread"></a> [azuread](#provider\_azuread) | ~> 2.30 |
 | <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.20 |
 | <a name="provider_azurerm.logs"></a> [azurerm.logs](#provider\_azurerm.logs) | ~> 3.20 |
@@ -28,7 +27,6 @@ No modules.
 
 | Name | Type |
 |------|------|
-| [azapi_resource.pim_assignments](https://registry.terraform.io/providers/azure/azapi/latest/docs/resources/resource) | resource |
 | [azuread_application.applications](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application) | resource |
 | [azuread_application_federated_identity_credential.federated_identity_credentials](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/application_federated_identity_credential) | resource |
 | [azuread_directory_role.roles](https://registry.terraform.io/providers/hashicorp/azuread/latest/docs/resources/directory_role) | resource |
