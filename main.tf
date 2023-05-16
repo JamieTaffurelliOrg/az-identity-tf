@@ -307,6 +307,97 @@ resource "azurerm_management_group_template_deployment" "pim_assignment_template
   })
 }
 
+resource "azuread_named_location" "named_locations" {
+  for_each     = { for k in var.named_locations : k.name => k if k != null }
+  display_name = each.value["name"]
+
+  dynamic "ip" {
+    for_each = each.value["ip_locations"]
+
+    content {
+      ip_ranges = ip.value["ip_ranges"]
+      trusted   = ip.value["trusted"]
+    }
+  }
+
+  dynamic "country" {
+    for_each = each.value["country_locations"]
+
+    content {
+      countries_and_regions                 = ip.value["countries_and_regions"]
+      include_unknown_countries_and_regions = ip.value["include_unknown_countries_and_regions"]
+    }
+  }
+}
+
+resource "azuread_conditional_access_policy" "conditional_access_policies" {
+  for_each     = { for k in var.conditional_access_policies : k.name => k if k != null }
+  display_name = each.key
+  state        = each.value["state"]
+
+  conditions {
+    client_app_types    = each.value["client_app_types"]
+    sign_in_risk_levels = each.value["sign_in_risk_levels"]
+    user_risk_levels    = each.value["user_risk_levels"]
+
+    applications {
+      included_applications = each.value.applications["included_applications"]
+      excluded_applications = each.value.applications["excluded_applications"]
+      included_user_actions = each.value.applications["included_user_actions"]
+    }
+
+    dynamic "devices" {
+      for_each = { "device" = each.value["devices"] }
+
+      content {
+
+        filter {
+          mode = devices.value["mode"]
+          rule = devices.value["rule"]
+        }
+      }
+    }
+
+    locations {
+      included_locations = each.value.locations["included_locations"]
+      excluded_locations = each.value.locations["excluded_locations"]
+    }
+
+    platforms {
+      included_platforms = each.value.platforms["included_platforms"]
+      excluded_platforms = each.value.platforms["excluded_platforms"]
+    }
+
+    users {
+      included_users  = each.value.users["included_users"]
+      excluded_users  = each.value.users["excluded_users"]
+      included_groups = each.value.users["included_groups"]
+      excluded_groups = each.value.users["excluded_groups"]
+      included_roles  = each.value.users["included_roles"]
+      excluded_roles  = each.value.users["excluded_roles"]
+    }
+  }
+
+  grant_controls {
+    operator                      = each.value.grant_controls["operator"]
+    built_in_controls             = each.value.grant_controls["built_in_controls"]
+    custom_authentication_factors = each.value.grant_controls["custom_authentication_factors"]
+    terms_of_use                  = each.value.grant_controls["terms_of_use"]
+  }
+
+  dynamic "session_controls" {
+    for_each = { "session_control" = each.value["session_controls"] }
+
+    content {
+      application_enforced_restrictions_enabled = session_controls.value["application_enforced_restrictions_enabled"]
+      sign_in_frequency                         = session_controls.value["sign_in_frequency"]
+      sign_in_frequency_period                  = session_controls.value["sign_in_frequency_period"]
+      cloud_app_security_policy                 = session_controls.value["cloud_app_security_policy"]
+      persistent_browser_mode                   = session_controls.value["persistent_browser_mode"]
+    }
+  }
+}
+
 resource "azurerm_monitor_aad_diagnostic_setting" "aad_diagnostics" {
   count                      = var.log_analytics_workspace.name != null ? 1 : 0
   name                       = "${var.log_analytics_workspace.name}-security-logging"

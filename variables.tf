@@ -362,6 +362,76 @@ variable "pim_assignments_groups" {
   description = "The PIM assignments to give to Azure AD groups"
 }
 
+variable "named_locations" {
+  type = list(object(
+    {
+      name = string
+      ip_locations = optional(map(object({
+        ip_ranges = list(string)
+        trusted   = optional(bool, true)
+      })))
+      country_locations = optional(map(object({
+        countries_and_regions                 = list(string)
+        include_unknown_countries_and_regions = optional(bool, false)
+      })))
+    }
+  ))
+  default     = []
+  description = "Named locations to include for Conditional Access Policies"
+}
+
+variable "conditional_access_policies" {
+  type = list(object(
+    {
+      name                = string
+      state               = optional(string, "enabled")
+      client_app_types    = optional(list(string), ["all"])
+      sign_in_risk_levels = optional(list(string))
+      user_risk_levels    = optional(list(string))
+      applications = object({
+        included_applications = optional(list(string))
+        excluded_applications = optional(list(string))
+        included_user_actions = optional(list(string))
+      })
+      devices = optional(object({
+        mode = string
+        rule = string
+      }))
+      locations = object({
+        excluded_locations = optional(list(string))
+        included_locations = list(string)
+      })
+      platforms = object({
+        excluded_platforms = optional(list(string))
+        included_platforms = list(string)
+      })
+      users = object({
+        included_users  = optional(list(string))
+        excluded_users  = optional(list(string))
+        included_groups = optional(list(string))
+        excluded_groups = optional(list(string))
+        included_roles  = optional(list(string))
+        excluded_roles  = optional(list(string))
+      })
+      grant_controls = object({
+        operator                      = string
+        built_in_controls             = list(string)
+        custom_authentication_factors = optional(list(string))
+        terms_of_use                  = optional(list(string))
+      })
+      session_controls = optional(object({
+        application_enforced_restrictions_enabled = optional(bool, false)
+        cloud_app_security_policy                 = optional(string)
+        persistent_browser_mode                   = optional(string)
+        sign_in_frequency                         = optional(number)
+        sign_in_frequency_period                  = optional(string)
+      }))
+    }
+  ))
+  default     = []
+  description = "Named locations to include for Conditional Access Policies"
+}
+
 variable "log_analytics_workspace" {
   type = object(
     {
