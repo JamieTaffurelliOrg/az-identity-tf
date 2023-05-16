@@ -369,12 +369,12 @@ resource "azuread_conditional_access_policy" "conditional_access_policies" {
     }
 
     users {
-      included_users  = each.value.users["included_users"]
-      excluded_users  = each.value.users["excluded_users"]
-      included_groups = each.value.users["included_groups"]
-      excluded_groups = each.value.users["excluded_groups"]
-      included_roles  = each.value.users["included_roles"]
-      excluded_roles  = each.value.users["excluded_roles"]
+      included_users  = setunion(each.value.users["included_user_ids"], azuread_user.users[(each.value.users["included_user_references"])].object_id)
+      excluded_users  = setunion(each.value.users["excluded_user_ids"], azuread_user.users[(each.value.users["excluded_user_references"])].object_id)
+      included_groups = setunion(each.value.users["included_group_ids"], azuread_group.groups[(each.value.users["included_group_references"])].object_id)
+      excluded_groups = setunion(each.value.users["excluded_group_ids"], azuread_group.groups[(each.value.users["excluded_group_references"])].object_id)
+      included_roles  = each.value.users["included_role_ids"]
+      excluded_roles  = each.value.users["excluded_role_ids"]
     }
   }
 
