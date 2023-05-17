@@ -324,8 +324,8 @@ resource "azuread_named_location" "named_locations" {
     for_each = each.value["country_locations"]
 
     content {
-      countries_and_regions                 = ip.value["countries_and_regions"]
-      include_unknown_countries_and_regions = ip.value["include_unknown_countries_and_regions"]
+      countries_and_regions                 = country.value["countries_and_regions"]
+      include_unknown_countries_and_regions = country.value["include_unknown_countries_and_regions"]
     }
   }
 }
