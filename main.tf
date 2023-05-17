@@ -359,8 +359,8 @@ resource "azuread_conditional_access_policy" "conditional_access_policies" {
     }
 
     locations {
-      included_locations = each.value.locations["included_locations"]
-      excluded_locations = each.value.locations["excluded_locations"]
+      included_locations = each.value.locations["included_location_references"]
+      excluded_locations = each.value.locations["excluded_location_references"]
     }
 
     platforms {
