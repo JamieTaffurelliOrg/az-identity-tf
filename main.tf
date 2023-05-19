@@ -307,6 +307,97 @@ resource "azurerm_management_group_template_deployment" "pim_assignment_template
   })
 }
 
+resource "azuread_named_location" "named_locations" {
+  for_each     = { for k in var.named_locations : k.name => k if k != null }
+  display_name = each.value["name"]
+
+  dynamic "ip" {
+    for_each = each.value["ip_locations"] == null ? {} : each.value["ip_locations"]
+
+    content {
+      ip_ranges = ip.value["ip_ranges"]
+      trusted   = ip.value["trusted"]
+    }
+  }
+
+  dynamic "country" {
+    for_each = each.value["country_locations"] == null ? {} : each.value["country_locations"]
+
+    content {
+      countries_and_regions                 = country.value["countries_and_regions"]
+      include_unknown_countries_and_regions = country.value["include_unknown_countries_and_regions"]
+    }
+  }
+}
+
+resource "azuread_conditional_access_policy" "conditional_access_policies" {
+  for_each     = { for k in var.conditional_access_policies : k.name => k if k != null }
+  display_name = each.key
+  state        = each.value["state"]
+
+  conditions {
+    client_app_types    = each.value["client_app_types"]
+    sign_in_risk_levels = each.value["sign_in_risk_levels"]
+    user_risk_levels    = each.value["user_risk_levels"]
+
+    applications {
+      included_applications = each.value.applications["included_applications"]
+      excluded_applications = each.value.applications["excluded_applications"]
+      included_user_actions = each.value.applications["included_user_actions"]
+    }
+
+    dynamic "devices" {
+      for_each = each.value["devices"] == null ? {} : { "device" = each.value["devices"] }
+
+      content {
+
+        filter {
+          mode = devices.value["mode"]
+          rule = devices.value["rule"]
+        }
+      }
+    }
+
+    locations {
+      included_locations = setunion(each.value.locations["included_location_ids"], [for k in each.value.locations["included_location_references"] : azuread_named_location.named_locations[(k)].id if k != null])
+      excluded_locations = setunion(each.value.locations["excluded_location_ids"], [for k in each.value.locations["excluded_location_references"] : azuread_named_location.named_locations[(k)].id if k != null])
+    }
+
+    platforms {
+      included_platforms = each.value.platforms["included_platforms"]
+      excluded_platforms = each.value.platforms["excluded_platforms"]
+    }
+
+    users {
+      included_users  = setunion(each.value.users["included_user_ids"], [for k in each.value.users["included_user_references"] : azuread_user.users[(k)].object_id if k != null])
+      excluded_users  = setunion(each.value.users["excluded_user_ids"], [for k in each.value.users["excluded_user_references"] : azuread_user.users[(k)].object_id if k != null])
+      included_groups = setunion(each.value.users["included_group_ids"], [for k in each.value.users["included_group_references"] : azuread_user.users[(k)].object_id if k != null])
+      excluded_groups = setunion(each.value.users["excluded_group_ids"], [for k in each.value.users["excluded_group_references"] : azuread_user.users[(k)].object_id if k != null])
+      included_roles  = each.value.users["included_role_ids"]
+      excluded_roles  = each.value.users["excluded_role_ids"]
+    }
+  }
+
+  grant_controls {
+    operator                      = each.value.grant_controls["operator"]
+    built_in_controls             = each.value.grant_controls["built_in_controls"]
+    custom_authentication_factors = each.value.grant_controls["custom_authentication_factors"]
+    terms_of_use                  = each.value.grant_controls["terms_of_use"]
+  }
+
+  dynamic "session_controls" {
+    for_each = each.value["session_controls"] == null ? {} : { "session_control" = each.value["session_controls"] }
+
+    content {
+      application_enforced_restrictions_enabled = session_controls.value["application_enforced_restrictions_enabled"]
+      sign_in_frequency                         = session_controls.value["sign_in_frequency"]
+      sign_in_frequency_period                  = session_controls.value["sign_in_frequency_period"]
+      cloud_app_security_policy                 = session_controls.value["cloud_app_security_policy"]
+      persistent_browser_mode                   = session_controls.value["persistent_browser_mode"]
+    }
+  }
+}
+
 resource "azurerm_monitor_aad_diagnostic_setting" "aad_diagnostics" {
   count                      = var.log_analytics_workspace.name != null ? 1 : 0
   name                       = "${var.log_analytics_workspace.name}-security-logging"
