@@ -398,24 +398,26 @@ variable "conditional_access_policies" {
         rule = string
       }))
       locations = object({
-        excluded_location_references = optional(list(string))
-        included_location_references = list(string)
+        excluded_location_references = optional(list(string), [])
+        excluded_location_ids        = optional(list(string), [])
+        included_location_references = optional(list(string), [])
+        included_location_ids        = optional(list(string), [])
       })
       platforms = object({
         excluded_platforms = optional(list(string))
         included_platforms = list(string)
       })
       users = object({
-        included_user_ids         = optional(list(string))
-        included_user_references  = optional(list(string))
-        excluded_user_ids         = optional(list(string))
-        excluded_user_references  = optional(list(string))
-        included_group_ids        = optional(list(string))
-        included_group_references = optional(list(string))
-        excluded_group_ids        = optional(list(string))
-        excluded_group_references = optional(list(string))
-        included_role_ids         = optional(list(string))
-        excluded_role_ids         = optional(list(string))
+        included_user_ids         = optional(list(string), [])
+        included_user_references  = optional(list(string), [])
+        excluded_user_ids         = optional(list(string), [])
+        excluded_user_references  = optional(list(string), [])
+        included_group_ids        = optional(list(string), [])
+        included_group_references = optional(list(string), [])
+        excluded_group_ids        = optional(list(string), [])
+        excluded_group_references = optional(list(string), [])
+        included_role_ids         = optional(list(string), [])
+        excluded_role_ids         = optional(list(string), [])
       })
       grant_controls = object({
         operator                      = string

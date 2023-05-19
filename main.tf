@@ -312,7 +312,7 @@ resource "azuread_named_location" "named_locations" {
   display_name = each.value["name"]
 
   dynamic "ip" {
-    for_each = each.value["ip_locations"]
+    for_each = each.value["ip_locations"] == null ? {} : each.value["ip_locations"]
 
     content {
       ip_ranges = ip.value["ip_ranges"]
@@ -321,7 +321,7 @@ resource "azuread_named_location" "named_locations" {
   }
 
   dynamic "country" {
-    for_each = each.value["country_locations"]
+    for_each = each.value["country_locations"] == null ? {} : each.value["country_locations"]
 
     content {
       countries_and_regions                 = country.value["countries_and_regions"]
@@ -347,7 +347,7 @@ resource "azuread_conditional_access_policy" "conditional_access_policies" {
     }
 
     dynamic "devices" {
-      for_each = { "device" = each.value["devices"] }
+      for_each = each.value["devices"] == null ? {} : { "device" = each.value["devices"] }
 
       content {
 
@@ -359,8 +359,8 @@ resource "azuread_conditional_access_policy" "conditional_access_policies" {
     }
 
     locations {
-      included_locations = each.value.locations["included_location_references"]
-      excluded_locations = each.value.locations["excluded_location_references"]
+      included_locations = setunion(each.value.locations["included_location_ids"], [for k in each.value.locations["included_location_references"] : azuread_named_location.named_locations[(k)].id if k != null])
+      excluded_locations = setunion(each.value.locations["excluded_location_ids"], [for k in each.value.locations["excluded_location_references"] : azuread_named_location.named_locations[(k)].id if k != null])
     }
 
     platforms {
@@ -369,10 +369,10 @@ resource "azuread_conditional_access_policy" "conditional_access_policies" {
     }
 
     users {
-      included_users  = setunion(each.value.users["included_user_ids"], azuread_user.users[(each.value.users["included_user_references"])].object_id)
-      excluded_users  = setunion(each.value.users["excluded_user_ids"], azuread_user.users[(each.value.users["excluded_user_references"])].object_id)
-      included_groups = setunion(each.value.users["included_group_ids"], azuread_group.groups[(each.value.users["included_group_references"])].object_id)
-      excluded_groups = setunion(each.value.users["excluded_group_ids"], azuread_group.groups[(each.value.users["excluded_group_references"])].object_id)
+      included_users  = setunion(each.value.users["included_user_ids"], [for k in each.value.users["included_user_references"] : azuread_user.users[(k)].object_id if k != null])
+      excluded_users  = setunion(each.value.users["excluded_user_ids"], [for k in each.value.users["excluded_user_references"] : azuread_user.users[(k)].object_id if k != null])
+      included_groups = setunion(each.value.users["included_group_ids"], [for k in each.value.users["included_group_references"] : azuread_user.users[(k)].object_id if k != null])
+      excluded_groups = setunion(each.value.users["excluded_group_ids"], [for k in each.value.users["excluded_group_references"] : azuread_user.users[(k)].object_id if k != null])
       included_roles  = each.value.users["included_role_ids"]
       excluded_roles  = each.value.users["excluded_role_ids"]
     }
@@ -386,7 +386,7 @@ resource "azuread_conditional_access_policy" "conditional_access_policies" {
   }
 
   dynamic "session_controls" {
-    for_each = { "session_control" = each.value["session_controls"] }
+    for_each = each.value["session_controls"] == null ? {} : { "session_control" = each.value["session_controls"] }
 
     content {
       application_enforced_restrictions_enabled = session_controls.value["application_enforced_restrictions_enabled"]
