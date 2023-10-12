@@ -14,10 +14,10 @@
 
 | Name | Version |
 |------|---------|
-| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | ~> 2.30 |
-| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | ~> 3.20 |
-| <a name="provider_azurerm.logs"></a> [azurerm.logs](#provider\_azurerm.logs) | ~> 3.20 |
-| <a name="provider_random"></a> [random](#provider\_random) | ~> 3.4 |
+| <a name="provider_azuread"></a> [azuread](#provider\_azuread) | 2.31.0 |
+| <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) | 3.35.0 |
+| <a name="provider_azurerm.logs"></a> [azurerm.logs](#provider\_azurerm.logs) | 3.35.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.4.3 |
 
 ## Modules
 
