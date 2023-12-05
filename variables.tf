@@ -293,7 +293,8 @@ variable "custom_rbac_role_assignments_users" {
   type = map(object(
     {
       user_reference        = string
-      custom_role_reference = string
+      custom_role_reference = optional(string)
+      custom_role_id        = optional(string)
       scope                 = string
       description           = optional(string)
     }
@@ -306,7 +307,8 @@ variable "custom_rbac_role_assignments_service_principals" {
   type = map(object(
     {
       service_principal_reference = string
-      custom_role_reference       = string
+      custom_role_reference       = optional(string)
+      custom_role_id              = optional(string)
       scope                       = string
       description                 = optional(string)
     }
@@ -319,7 +321,8 @@ variable "custom_rbac_role_assignments_groups" {
   type = map(object(
     {
       group_reference       = string
-      custom_role_reference = string
+      custom_role_reference = optional(string)
+      custom_role_id        = optional(string)
       scope                 = string
       description           = optional(string)
     }
@@ -332,7 +335,8 @@ variable "custom_rbac_role_assignments_objects" {
   type = map(object(
     {
       object_reference      = string
-      custom_role_reference = string
+      custom_role_reference = optional(string)
+      custom_role_id        = optional(string)
       scope                 = string
       description           = optional(string)
     }
