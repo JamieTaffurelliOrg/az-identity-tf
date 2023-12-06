@@ -307,8 +307,8 @@ variable "custom_rbac_role_assignments_service_principals" {
   type = map(object(
     {
       service_principal_reference = string
-      custom_role_reference       = optional(string)
-      custom_role_id              = optional(string)
+      custom_role_reference       = optional(string, null)
+      custom_role_id              = optional(string, null)
       scope                       = string
       description                 = optional(string)
     }
