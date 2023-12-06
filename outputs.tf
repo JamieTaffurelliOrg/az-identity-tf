@@ -25,6 +25,6 @@ output "groups" {
 }
 
 output "rbac_role_definitions" {
-  value       = [for rbac_role_definitions in azurerm_role_definition.rbac_role_definitions : rbac_role_definitions.id]
+  value       = { for k, v in azurerm_role_definition.rbac_role_definitions : k => v }
   description = "Azure Custom RBAC roles"
 }
