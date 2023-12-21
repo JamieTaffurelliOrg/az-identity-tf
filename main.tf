@@ -57,6 +57,13 @@ resource "azuread_service_principal" "service_principals" {
   tags                         = each.value["tags"]
 }
 
+resource "azuread_app_role_assignment" "app_role_assignment" {
+  for_each            = { for k in local.service_principal_admin_consents : "${k.service_principal_name}-${k.app_role_id}-${k.resource_object_id}" => k if k != null }
+  app_role_id         = each.value["app_role_id"]
+  principal_object_id = azuread_service_principal.service_principals[(each.value["service_principal_name"])].object_id
+  resource_object_id  = each.value["resource_object_id"]
+}
+
 resource "random_password" "user_password" {
   for_each         = var.users
   length           = 16
