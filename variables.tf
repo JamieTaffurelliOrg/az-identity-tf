@@ -59,7 +59,14 @@ variable "service_principals" {
       notification_email_addresses = optional(list(string))
       owners                       = optional(list(string))
       use_existing                 = optional(bool, false)
-      tags                         = list(string)
+      admin_consents = optional(list(object(
+        {
+          service_principal_name = string
+          app_role_id            = string
+          resource_object_id     = string
+        }
+      )))
+      tags = list(string)
     }
   ))
   default     = {}
