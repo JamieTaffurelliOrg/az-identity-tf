@@ -65,7 +65,7 @@ variable "service_principals" {
           app_role_id            = string
           resource_object_id     = string
         }
-      )))
+      )), [])
       tags = list(string)
     }
   ))
